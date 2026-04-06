@@ -1,0 +1,128 @@
+# Default values for paperless-ngx.
+
+replicaCount: 1
+
+image:
+  repository: ghcr.io/paperless-ngx/paperless-ngx
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+# Paperless-ngx application settings
+paperless:
+  url: "https://paperless.example.com"
+  secretKey: "" # auto-generated if empty
+  dbPasswordSecret:
+    name: "" # name of the Secret containing the DB password
+    key: password
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 8000
+
+# Gateway API HTTPRoute
+httpRoute:
+  enabled: false
+  annotations: {}
+  parentRefs:
+  # - name: my-gateway
+  #   namespace: default
+  hostnames: [] # auto-derived from paperless.url if empty
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+
+resources: {}
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# Extra environment variables for paperless-ngx
+extraEnv:
+  - name: PAPERLESS_USE_X_FORWARD_HOST
+    value: "true"
+# Extra volumes and volume mounts
+extraVolumes: []
+extraVolumeMounts: []
+
+# Persistence for paperless-ngx data directories
+persistence:
+  data:
+    size: 10Gi
+    storageClass: ""
+    existingClaim: ""
+  media:
+    size: 10Gi
+    storageClass: ""
+    existingClaim: ""
+  export:
+    size: 5Gi
+    storageClass: ""
+    existingClaim: ""
+  consume:
+    size: 5Gi
+    storageClass: ""
+    existingClaim: ""
+
+# CloudNativePG PostgreSQL cluster configuration
+cnpg:
+  enabled: true
+  instances: 1
+  annotations: {}
+  database: paperless
+  owner: paperless
+  logLevel: warning
+  primaryUpdateStrategy: unsupervised
+  storage:
+    size: 10Gi
+    storageClass: ""
+  parameters: {}
+  resources: {}
+
+# Valkey (Redis-compatible) subchart configuration
+# Full options: https://github.com/valkey-io/valkey-helm/blob/main/valkey/values.yaml
+valkey:
+  enabled: true
+  replica:
+    enabled: false
+  auth:
+    enabled: false
+  dataStorage:
+    enabled: true
+    requestedSize: 1Gi
+  resources: {}
+
+# Apache Tika - document parsing service
+tika:
+  enabled: true
+  image:
+    repository: docker.io/apache/tika
+    tag: latest
+    pullPolicy: IfNotPresent
+  resources: {}
+
+# Gotenberg - document conversion service
+gotenberg:
+  enabled: true
+  image:
+    repository: docker.io/gotenberg/gotenberg
+    tag: "8.27"
+    pullPolicy: IfNotPresent
+  command:
+    - "gotenberg"
+    - "--chromium-disable-javascript=true"
+    - "--chromium-allow-list=file:///tmp/.*"
+  resources: {}

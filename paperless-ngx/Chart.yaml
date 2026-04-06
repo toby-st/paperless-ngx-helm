@@ -1,0 +1,12 @@
+apiVersion: v2
+name: paperless-ngx
+description: A Helm chart for deploying paperless-ngx with PostgreSQL (CNPG), Valkey, Tika, and Gotenberg
+type: application
+version: 0.1.0
+appVersion: "2.16.3"
+
+dependencies:
+  - name: valkey
+    version: "0.9.3"
+    repository: "https://valkey.io/valkey-helm/"
+    condition: valkey.enabled
