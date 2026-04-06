@@ -1,0 +1,20 @@
+apiVersion: v1
+entries:
+  paperless-ngx:
+  - apiVersion: v2
+    appVersion: 2.16.3
+    created: "2026-04-06T18:32:29.36059356Z"
+    dependencies:
+    - condition: valkey.enabled
+      name: valkey
+      repository: https://valkey.io/valkey-helm/
+      version: 0.9.3
+    description: A Helm chart for deploying paperless-ngx with PostgreSQL (CNPG),
+      Valkey, Tika, and Gotenberg
+    digest: 54e27b7005f237f502371c264e55ad2757d843f9ffa1e412eaab23b7fbbc7f00
+    name: paperless-ngx
+    type: application
+    urls:
+    - https://github.com/toby-st/paperless-ngx-helm/releases/download/paperless-ngx-0.1.0/paperless-ngx-0.1.0.tgz
+    version: 0.1.0
+generated: "2026-04-06T18:32:29.360598829Z"
